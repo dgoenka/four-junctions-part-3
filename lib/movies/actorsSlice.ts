@@ -1,31 +1,34 @@
 import { createSlice, Slice } from "@reduxjs/toolkit";
 import axios from "axios";
+import isEmpty from "lodash.isempty";
 
-export const getMovies = async ({
+export const getActors = async ({
   skip = undefined,
   count = undefined,
-}: undefined | { skip?: unknown; count?: unknown } = {}) => {
-  let { data } = await axios("/api/movies/list", {
+  search = undefined,
+}: undefined | { skip?: unknown; count?: unknown; search?: unknown } = {}) => {
+  let { data } = await axios("/api/actors/list", {
     method: "GET",
     params: {
       skip: Number.isFinite(skip) ? skip : 0,
       count: Number.isFinite(count) ? count : 10,
+      ...(!isEmpty(search) ? { search } : {}),
     },
   });
   return data;
 };
 
 // @ts-ignore
-const moviesSlice: Slice = createSlice({
-  name: "movies",
+const actorsSlice: Slice = createSlice({
+  name: "actors",
   initialState: {
-    movies: [],
+    actors: [],
     total: 0,
     status: "idle",
   },
   reducers: {
-    clearMovies(state: { movies: any[] }) {
-      state.movies = [];
+    clearActors(state: { actors: any[] }) {
+      state.actors = [];
     },
     startLoading(state) {
       state.status = "loading";
@@ -34,10 +37,10 @@ const moviesSlice: Slice = createSlice({
     fulfilled(state, action) {
       state.total = action.payload.total;
       // @ts-ignore
-      state.movies.push(action?.payload);
+      state.actors.push(action?.payload);
       state.status = "idle";
     },
   },
 });
-export const { clearMovies, startLoading, fulfilled } = moviesSlice.actions;
-export default moviesSlice.reducer;
+export const { clearActors, startLoading, fulfilled } = actorsSlice.actions;
+export default actorsSlice.reducer;

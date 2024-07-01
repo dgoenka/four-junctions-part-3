@@ -18,36 +18,26 @@ export async function GET(request: NextRequest) {
 
     const query: FilterQuery<any> = {};
 
-    if (search) {
+    if (!isEmpty(search)) {
       query.actor_name = { $regex: search, $options: "i" }; // 'i' for case-insensitive search
     }
 
-    // Define the aggregation pipeline
+    // @ts-ignore
     const pipeline: PipelineStage[] = [
       // @ts-ignore
-
-      ...(search ? [{ $match: query }] : []), // Apply search filter
+      ...(!isEmpty(search) ? [{ $match: query }] : []), // Apply search filter
       // @ts-ignore
-      ...(sortField && sortOrder
+      ...(!isEmpty(sortField) && !isEmpty(sortOrder)
         ? [{ $sort: { [sortField]: sortOrder } }]
         : []), // Sort based on sortField and sortOrder
-      // @ts-ignore
-      {
-        $facet: {
-          // Facet for total count
-          total: [{ $count: "totalActors" }],
-          // Facet for paginated results
-          data: [{ $skip: skip || 0 }, { $limit: count || 100 }],
-        },
-      },
     ];
 
     // Execute the aggregation query
-    const results = await Actor.aggregate(pipeline);
+    const results = await Actor.aggregate(pipeline).exec();
 
     // Extract total count and paginated actors
-    const total = results[0].total[0].totalActors;
-    const actors = results[0].data;
+    const total = results?.[0]?.total?.[0]?.totalActors;
+    const actors = results?.[0]?.data;
 
     if (!isEmpty(actors))
       return NextResponse.json(
