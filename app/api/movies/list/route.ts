@@ -91,8 +91,6 @@ export async function GET(request: NextRequest) {
     // Execute the aggregation query
     const results = await Movie.aggregate(pipeline).exec();
 
-    console.log(JSON.stringify(results, null, 2));
-
     // Extract total count and paginated actors
     const total = results?.[0]?.total?.[0]?.totalActors;
     const movies = results?.[0]?.data;
