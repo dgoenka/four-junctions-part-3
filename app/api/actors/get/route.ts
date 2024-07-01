@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Actor from "@/models/actorModel";
 import { connect } from "@/dbConfig";
+import isEmpty from "lodash.isempty";
 
 connect();
 
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
     const actors = await Actor.find({ _id: { $in: ids } }).exec();
 
-    if (actors) return NextResponse.json({ actors }, { status: 200 });
+    if (!isEmpty(actors)) return NextResponse.json({ actors }, { status: 200 });
     else NextResponse.json({ error: "Not found" }, { status: 404 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });

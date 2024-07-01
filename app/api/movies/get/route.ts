@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig";
 import Movie from "@/models/movieModel";
+import isEmpty from "lodash.isempty";
 
 connect();
 
@@ -14,7 +15,7 @@ export async function GET(request: NextRequest) {
 
     const movies = await Movie.find({ _id: { $in: ids } }).exec();
 
-    if (movies) return NextResponse.json({ movies }, { status: 200 });
+    if (!isEmpty(movies)) return NextResponse.json({ movies }, { status: 200 });
     else NextResponse.json({ error: "Not Found" }, { status: 404 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });

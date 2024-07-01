@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connect } from "@/dbConfig";
 import Actor from "@/models/actorModel";
+import isEmpty from "lodash.isempty";
 
 connect();
 
@@ -19,7 +20,7 @@ export async function POST(request: NextRequest) {
     const actor = await Actor.findByIdAndUpdate(actorDto._id, updatedDoc, {
       new: true,
     }).exec();
-    if (actor) return NextResponse.json({ actor }, { status: 200 });
+    if (!isEmpty(actor)) return NextResponse.json({ actor }, { status: 200 });
     else return NextResponse.json({ error: "Not Found" }, { status: 404 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Actor from "@/models/actorModel";
 import { connect } from "@/dbConfig";
 import { FilterQuery, PipelineStage } from "mongoose";
+import isEmpty from "lodash.isempty";
 
 connect();
 
@@ -48,7 +49,7 @@ export async function GET(request: NextRequest) {
     const total = results[0].total[0].totalActors;
     const actors = results[0].data;
 
-    if (actors)
+    if (!isEmpty(actors))
       return NextResponse.json(
         {
           total,
