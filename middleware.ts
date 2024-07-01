@@ -2,16 +2,23 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Pathsinfo } from "@/pathsinfo";
 
-const PUBLIC_PATHS = Pathsinfo.filter((path) => path.public);
-
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Define paths that are considered public (accessible without a token)
-  const isPublicPath = PUBLIC_PATHS.some((pathObj) => pathObj.path === path);
+  const pathInfoObj = Pathsinfo.find((pathObj) => pathObj.path === path);
+
+  if (!pathInfoObj)
+    return NextResponse.json({ error: "Path not found" }, { status: 404 });
+
+  const isPublicPath = pathInfoObj?.public;
 
   // Get the token from the cookies
   const token = request.cookies.get("token")?.value || "";
+
+  if (!isPublicPath && pathInfoObj?.isApi && !token)
+    return NextResponse.json({ error: "Unauthorised" }, { status: 400 });
+
   const headers = new Headers(request.headers);
   headers.set("x-current-path", request.nextUrl.pathname);
 
@@ -33,8 +40,6 @@ export function middleware(request: NextRequest) {
   });
 }
 
-// It specifies the paths for which this middleware should be executed.
-// In this case, it's applied to '/', '/profile', '/login', and '/signup'.
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
