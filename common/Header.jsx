@@ -1,5 +1,6 @@
 import { cookies, headers } from "next/headers";
 import { Pathsinfo } from "@/pathsinfo";
+import Link from "next/link";
 
 const Header = () => {
   const headerList = headers();
@@ -13,11 +14,13 @@ const Header = () => {
       </h1>
       {token ? (
         <div>
-          <form action={"/api/users/logout"} method={"get"}>
-            <button className={"btn secondary-btn"} type={"submit"}>
-              Logout
-            </button>
-          </form>
+          <Link
+            href={"/logout"}
+            className={"btn secondary-btn"}
+            type={"submit"}
+          >
+            Logout
+          </Link>
         </div>
       ) : pathInfo ? (
         <h1>{pathInfo.title}</h1>

@@ -1,10 +1,6 @@
-import axios from "axios";
-import { redirect } from "next/navigation";
+"use client";
+import React from "react";
 
-export default function Logout() {
-  try {
-    axios.get("/api/users/logout").then(() => redirect("/login"));
-  } catch (error: any) {
-    console.log(error.message);
-  }
+export default function LogoutPage() {
+  return <div></div>;
 }

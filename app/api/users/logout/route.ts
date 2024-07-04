@@ -1,12 +1,6 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
+import { logout } from "@/util/logout";
 
 export async function GET(request: NextRequest) {
-  try {
-    const response = NextResponse.redirect(process.env.domain + "/");
-    response.cookies.set("token", "", { httpOnly: true, expires: new Date(0) });
-
-    return response;
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
+  return await logout(request);
 }

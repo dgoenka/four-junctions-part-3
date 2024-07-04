@@ -1,9 +1,14 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Pathsinfo } from "@/pathsinfo";
+import { logout } from "@/util/logout";
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
+
+  if (path === "/logout") {
+    return logout(request);
+  }
 
   // Define paths that are considered public (accessible without a token)
   const pathInfoObj = Pathsinfo.find((pathObj) => pathObj.path === path);

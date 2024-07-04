@@ -114,4 +114,9 @@ export const Pathsinfo = [
     title: "Home",
     public: false,
   },
+  {
+    path: "/logout",
+    title: "Logout",
+    public: false,
+  },
 ];

@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -27,6 +27,10 @@ export default function SignupPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    router.refresh();
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-2">
