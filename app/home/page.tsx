@@ -268,7 +268,11 @@ export default function Home() {
 
   return (
     <>
-      <div>
+      <div
+        className={
+          "header-box-like-margin flex flex-col w-100 border-box h-auto"
+        }
+      >
         <div className={"w-100 flex flex-col justify-start items-end"}>
           <button
             className={"btn secondary-btn mb-2"}
@@ -277,18 +281,22 @@ export default function Home() {
             <span className={"normal"}>Add Movie</span>
           </button>
         </div>
-        <DataTable
-          // @ts-ignore
-          columns={columns(setEditingMovie)}
-          // @ts-ignore
-          data={getMoviesSegment()?.data || []}
-          pagination
-          paginationServer
-          paginationTotalRows={movies?.total}
-          onChangeRowsPerPage={handlePerRowsChange}
-          onChangePage={handlePageChange}
-          progressPending={movies?.state === "loading"}
-        />
+        <div className={"rounded-2xl overflow-hidden"}>
+          <div>
+            <DataTable
+              // @ts-ignore
+              columns={columns(setEditingMovie)}
+              // @ts-ignore
+              data={getMoviesSegment()?.data || []}
+              pagination
+              paginationServer
+              paginationTotalRows={movies?.total}
+              onChangeRowsPerPage={handlePerRowsChange}
+              onChangePage={handlePageChange}
+              progressPending={movies?.state === "loading"}
+            />
+          </div>
+        </div>
       </div>
       {(addingMovie || editingMovie) && (
         <EditDialog
