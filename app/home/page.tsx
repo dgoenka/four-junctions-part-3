@@ -244,14 +244,12 @@ export default function Home() {
   };
 
   useEffect(() => {
-    console.log("in home useEffect");
     if (
       !currentPageRef.current ||
       !perPageRef.current ||
       currentPageRef.current !== currentPage ||
       perPageRef.current !== perPage
     ) {
-      console.log("making skip and count");
       currentPageRef.current = currentPage || 1;
       perPageRef.current = perPage || 10;
 
@@ -261,14 +259,11 @@ export default function Home() {
       let segmentToReturn = (movies?.movies || []).find((segment: any) => {
         return segment.count === count && segment.skip === skip;
       });
-      console.log("has segmentToReturn: " + !!segmentToReturn);
       if (!segmentToReturn) {
         // @ts-ignore
         console.log("loading data");
         loadData(skip, count);
       }
-    } else {
-      console.log("no api called");
     }
   }, [currentPage, perPage]);
 
