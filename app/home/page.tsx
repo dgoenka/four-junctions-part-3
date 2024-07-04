@@ -246,6 +246,8 @@ export default function Home() {
   useEffect(() => {
     console.log("in home useEffect");
     if (
+      !currentPageRef.current ||
+      !perPageRef.current ||
       currentPageRef.current !== currentPage ||
       perPageRef.current !== perPage
     ) {
